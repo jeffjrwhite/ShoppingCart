@@ -3,20 +3,19 @@ package com.jeffwhite.shoppingcart
 import scala.util.{Failure, Success, Try}
 
 class ShoppingCart(
-                    var items: Map[SalesItemType.Value, SalesItem] = Map()
+                    var items: Map[SalesItemType.Value, ItemTrait] = Map()
                   )
 {
   def addSalesItem(itemType: SalesItemType.Value, count: Int = 1): Unit = {
 
     items match {
-      // If one or more items already in cart - increment count
-      case map: Map[SalesItemType.Value, SalesItem] if map.contains(itemType) =>
-        val newitem: SalesItem = map(itemType).incrementItem
-        items = map.filter(x => x._1 != itemType) + (itemType -> newitem)
-      // Else add item to cart
-      case map: Map[SalesItemType.Value, SalesItem] =>
+      // If one or more promotional items already in cart - increment count
+      case map: Map[SalesItemType.Value, ItemTrait] if map.contains(itemType) =>
+        map(itemType).incrementItem
+      // Else add regular item to cart
+      case map: Map[SalesItemType.Value, ItemTrait] =>
         getSalesItemFromInventory(itemType, count) match {
-          case Success(item: SalesItem) =>
+          case Success(item: ItemTrait) =>
             items = items + (item.itemType -> item)
           case Failure(ex) =>
             println(ex.getLocalizedMessage)
@@ -24,18 +23,18 @@ class ShoppingCart(
     }
   }
 
-  private def getSalesItemFromInventory(itemType: SalesItemType.Value, count: Int = 1): Try[SalesItem] = {
+  private def getSalesItemFromInventory(itemType: SalesItemType.Value, count: Int = 1): Try[ItemTrait] = {
     ItemInventory.items match {
-      case map: Map[SalesItemType.Value, SalesItem] if map.contains(itemType) =>
+      case map: Map[SalesItemType.Value, ItemTrait] if map.contains(itemType) =>
         Success(map(itemType))
-      case map: Map[SalesItemType.Value, SalesItem] =>
+      case map: Map[SalesItemType.Value, ItemTrait] =>
         Failure(new RuntimeException(s"Item [$itemType] not found in Inventory"))
     }
   }
 
   def totalise():Int = {
 
-    items.map(x => x._2.itemCount * x._2.priceIn100s).foldLeft(0)(_ + _)
+    items.map(x => x._2.calculateItemTotal).foldLeft(0)(_ + _)
 
   }
 
@@ -46,4 +45,5 @@ class ShoppingCart(
   }
 
   def itemCount: Int = items.map(x => x._2.itemCount).foldLeft(0)(_ + _)
+
 }

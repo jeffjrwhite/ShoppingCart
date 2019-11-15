@@ -2,9 +2,9 @@ package com.jeffwhite.shoppingcart
 
 object ItemInventory
 {
-  var items: Map[SalesItemType.Value, SalesItem] = Map()
+  var items: Map[SalesItemType.Value, ItemTrait] = Map()
 
-  def addItemToInventory(item: SalesItem): Unit = {
+  def addItemToInventory(item: ItemTrait): Unit = {
 
     items match {
       // If item already in inventory do nothing
