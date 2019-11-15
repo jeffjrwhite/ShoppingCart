@@ -1,6 +1,6 @@
 package com.jeffwhite.shoppingcart
 
-object ItemInventory
+class ItemInventory
 {
   var items: Map[SalesItemType.Value, ItemTrait] = Map()
 

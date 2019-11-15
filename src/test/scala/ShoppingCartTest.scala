@@ -13,7 +13,6 @@ class ShoppingCartTest extends FlatSpec with Matchers with BeforeAndAfterAll wit
 
     override def beforeEach {
       println("Setup:beforeEach")
-      println(s"ItemInventory ${ItemInventory.items}")
     }
 
     override def afterEach {
@@ -24,12 +23,13 @@ class ShoppingCartTest extends FlatSpec with Matchers with BeforeAndAfterAll wit
 
       println("Basic ShoppingCart test running...")
       // Create test inventory
-      ItemInventory.addItemToInventory(SalesItem(SalesItemType.APPLE, 60))
-      ItemInventory.addItemToInventory(SalesItem(SalesItemType.ORANGE, 25))
+      val itemInventory = new ItemInventory
+      itemInventory.addItemToInventory(SalesItem(SalesItemType.APPLE, 60))
+      itemInventory.addItemToInventory(SalesItem(SalesItemType.ORANGE, 25))
 
-      println(s"ItemInventory ${ItemInventory.items}")
+      println(s"ItemInventory ${itemInventory.items}")
       // Create a cart
-      val cart = new ShoppingCart
+      val cart = new ShoppingCart(itemInventory)
       // Add an apple
       cart.addSalesItem(SalesItemType.APPLE)
       // Add an orange
@@ -65,12 +65,13 @@ class ShoppingCartTest extends FlatSpec with Matchers with BeforeAndAfterAll wit
 
     println("Promotional ShoppingCart test running...")
     // Create test inventory
-    ItemInventory.addItemToInventory(PromotionalSalesItem(SalesItemType.APPLE, 60, 2, 1))
-    ItemInventory.addItemToInventory(PromotionalSalesItem(SalesItemType.ORANGE, 25, 3, 2))
+    val itemInventory = new ItemInventory
+    itemInventory.addItemToInventory(PromotionalSalesItem(SalesItemType.APPLE, 60, 2, 1))
+    itemInventory.addItemToInventory(PromotionalSalesItem(SalesItemType.ORANGE, 25, 3, 2))
+    println(s"ItemInventory ${itemInventory.items}")
 
-    println(s"ItemInventory ${ItemInventory.items}")
     // Create a cart
-    val cart = new ShoppingCart
+    val cart = new ShoppingCart(itemInventory)
     // Add an apple
     cart.addSalesItem(SalesItemType.APPLE)
     // Add an orange
@@ -98,12 +99,13 @@ class ShoppingCartTest extends FlatSpec with Matchers with BeforeAndAfterAll wit
 
     println("Promotional ShoppingCart test running...")
     // Create test inventory
-    ItemInventory.addItemToInventory(PromotionalSalesItem(SalesItemType.APPLE, 60, 2, 1))
-    ItemInventory.addItemToInventory(PromotionalSalesItem(SalesItemType.ORANGE, 25, 3, 2))
+    val itemInventory = new ItemInventory
+    itemInventory.addItemToInventory(PromotionalSalesItem(SalesItemType.APPLE, 60, 2, 1))
+    itemInventory.addItemToInventory(PromotionalSalesItem(SalesItemType.ORANGE, 25, 3, 2))
+    println(s"ItemInventory ${itemInventory.items}")
 
-    println(s"ItemInventory ${ItemInventory.items}")
     // Create a cart
-    val cart = new ShoppingCart
+    val cart = new ShoppingCart(itemInventory)
     // Add an apple
     cart.addSalesItem(SalesItemType.APPLE)
     // Add an orange

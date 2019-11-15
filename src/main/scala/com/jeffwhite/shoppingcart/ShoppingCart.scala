@@ -3,6 +3,7 @@ package com.jeffwhite.shoppingcart
 import scala.util.{Failure, Success, Try}
 
 class ShoppingCart(
+                    val itemInventory: ItemInventory,
                     var items: Map[SalesItemType.Value, ItemTrait] = Map()
                   )
 {
@@ -14,7 +15,7 @@ class ShoppingCart(
         map(itemType).incrementItem
       // Else add regular item to cart
       case map: Map[SalesItemType.Value, ItemTrait] =>
-        getSalesItemFromInventory(itemType, count) match {
+        getSalesItemFromInventory(itemInventory, itemType, count) match {
           case Success(item: ItemTrait) =>
             items = items + (item.itemType -> item)
           case Failure(ex) =>
@@ -23,8 +24,8 @@ class ShoppingCart(
     }
   }
 
-  private def getSalesItemFromInventory(itemType: SalesItemType.Value, count: Int = 1): Try[ItemTrait] = {
-    ItemInventory.items match {
+  private def getSalesItemFromInventory(itemInventory: ItemInventory, itemType: SalesItemType.Value, count: Int = 1): Try[ItemTrait] = {
+    itemInventory.items match {
       case map: Map[SalesItemType.Value, ItemTrait] if map.contains(itemType) =>
         Success(map(itemType))
       case map: Map[SalesItemType.Value, ItemTrait] =>
